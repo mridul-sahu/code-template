@@ -1,0 +1,16 @@
+#include "../library/my_def.hpp"
+//#include "../library/CPfunc.hpp"
+//#include "../library/CPMfunc.hpp"
+//#include "../library/disjoint_sets.hpp"
+//#include "../library/big_int.hpp"
+//#include "../library/fenwick_tree.hpp"
+//#include "../library/segement_lazy.hpp"
+//#include "../library/bellman_ford.hpp"
+//#include "../library/ford_flow.hpp"
+
+class %ClassName% {
+public:
+	void solve(std::istream& in, std::ostream& out) {
+
+	}
+};

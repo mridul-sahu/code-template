@@ -1,0 +1,10 @@
+%Code%
+
+int main() {
+	ios::sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
+	%ClassName% solver;
+	%Input%
+	%Output%
+	%SolverCall%
+	return 0;
+}
