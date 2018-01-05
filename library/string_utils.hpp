@@ -4,20 +4,20 @@
 #include "my_def.hpp"
 
 struct KMP{
-    int m;
+    ll m;
     string p;
-    vector<int> fail;
-    knuth_morris_pratt(string p) : p(p), m(p.size()) {
+    vector<ll> fail;
+    explicit KMP(string p) : p(p), m((ll)p.size()) {
         fail.resize(m+1, -1);
-        for (int i = 1, j = -1; i <= m; ++i) {
+        for (ll i = 1, j = -1; i <= m; ++i) {
             while (j >= 0 && p[j] != p[i-1]) j = fail[j];
             fail[i] = ++j;
         }
     }
-    vector<int> match(string s) {
-        int n = strlen(s);
-        vector<int> occur;
-        for (int i = 0, k = 0; i < n; ++i) {
+    vector<ll> match(string s) {
+        ll n = (ll) s.size();
+        vector<ll> occur;
+        for (ll i = 0, k = 0; i < n; ++i) {
             while (k >= 0 && s[i] != p[k]) k = fail[k];
             if (++k == m) {
                 /* match at s[i-m+1 ... i] */
@@ -25,6 +25,55 @@ struct KMP{
             }
         }
         return occur;
+    }
+};
+
+struct Trie{
+    int words;
+    int prefixes;
+    Trie *edges[256];
+
+    void Trie(){
+        words = 0;
+        prefixes = 0;
+        for(int i = 0; i < 256; ++i){
+            edges[i] = nullptr;
+        }
+    }
+
+    void addWord(Trie* root, const string& word){
+        root->prefixes += 1;
+        if(word.empty())
+            root->words += 1;
+        else{
+            if(root->edges[word[0]] == nullptr){
+                root->edges[word[0]] = new Trie();
+            }
+            addWord(root->edges[word[0]], word.substr(1));
+        }
+    }
+
+    void addWord(const string& word){
+        if(word.empty())
+            return;
+        else
+            addWord(this, word);
+    }
+
+    int countWords(const string& word, Trie* root = this){
+        if(root == nullptr)
+            return 0;
+        if(word.empty())
+            return root->words;
+        return countWords(word.substr(1), root->edges[word[0]]);
+    }
+
+    int countPrefix(const string& word, Trie* root = this){
+        if(root == nullptr)
+            return 0;
+        if(word.empty())
+            return root->prefixes;
+        return countPrefix(word.substr(1), root->edges[word[0]]);
     }
 };
 
