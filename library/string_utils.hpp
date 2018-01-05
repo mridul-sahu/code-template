@@ -3,17 +3,19 @@
 
 #include "my_def.hpp"
 
-struct KMP{
+struct KMP {
     ll m;
     string p;
     vector<ll> fail;
-    explicit KMP(string p) : p(p), m((ll)p.size()) {
-        fail.resize(m+1, -1);
+
+    explicit KMP(string p) : p(p), m((ll) p.size()) {
+        fail.resize(m + 1, -1);
         for (ll i = 1, j = -1; i <= m; ++i) {
-            while (j >= 0 && p[j] != p[i-1]) j = fail[j];
+            while (j >= 0 && p[j] != p[i - 1]) j = fail[j];
             fail[i] = ++j;
         }
     }
+
     vector<ll> match(string s) {
         ll n = (ll) s.size();
         vector<ll> occur;
@@ -21,59 +23,67 @@ struct KMP{
             while (k >= 0 && s[i] != p[k]) k = fail[k];
             if (++k == m) {
                 /* match at s[i-m+1 ... i] */
-                occur.push_back(i-m+1);
+                occur.push_back(i - m + 1);
             }
         }
         return occur;
     }
 };
 
-struct Trie{
+struct Trie {
     int words;
     int prefixes;
     Trie *edges[256];
 
-    void Trie(){
+    Trie() {
         words = 0;
         prefixes = 0;
-        for(int i = 0; i < 256; ++i){
+        for (int i = 0; i < 256; ++i) {
             edges[i] = nullptr;
         }
     }
 
-    void addWord(Trie* root, const string& word){
+    void addWord(Trie *root, const string &word) {
         root->prefixes += 1;
-        if(word.empty())
+        if (word.empty())
             root->words += 1;
-        else{
-            if(root->edges[word[0]] == nullptr){
+        else {
+            if (root->edges[word[0]] == nullptr) {
                 root->edges[word[0]] = new Trie();
             }
             addWord(root->edges[word[0]], word.substr(1));
         }
     }
 
-    void addWord(const string& word){
-        if(word.empty())
+    void addWord(const string &word) {
+        if (word.empty())
             return;
         else
             addWord(this, word);
     }
 
-    int countWords(const string& word, Trie* root = this){
-        if(root == nullptr)
+    int countWords(const string &word, Trie *root) {
+        if (root == nullptr)
             return 0;
-        if(word.empty())
+        if (word.empty())
             return root->words;
         return countWords(word.substr(1), root->edges[word[0]]);
     }
 
-    int countPrefix(const string& word, Trie* root = this){
-        if(root == nullptr)
+    int countPrefixes(const string &word, Trie *root) {
+        if (root == nullptr)
             return 0;
-        if(word.empty())
+        if (word.empty())
             return root->prefixes;
-        return countPrefix(word.substr(1), root->edges[word[0]]);
+        return countPrefixes(word.substr(1), root->edges[word[0]]);
+    }
+
+    int countWords(const string &word) {
+        return countWords(word, this);
+    }
+
+    int countPrefixes(const string &word) {
+        return countPrefixes(word, this);
     }
 };
 
