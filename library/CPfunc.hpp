@@ -4,7 +4,6 @@
 #include "my_def.hpp"
 
 namespace CP {
-    const ll INF = numeric_limits<ll>::max();
 
     ll gcd(ll a, ll b) { return b ? gcd(b, a % b) : a; }
 
